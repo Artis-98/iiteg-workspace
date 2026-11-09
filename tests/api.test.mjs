@@ -13,6 +13,14 @@ test('fresh install, demo data, access controls and collaboration lifecycle', {s
   const login=await request('/auth.php','POST',{email:process.env.ADMIN_EMAIL,password:process.env.ADMIN_PASSWORD});
   assert.equal(login.status,200,JSON.stringify(login));const token=login.data.token;
   const me=await ws('me','GET',undefined,token);assert.equal(me.data.me.role,'op');
+  const initialBranding=await request('/branding.php');assert.equal(initialBranding.status,200);assert.deepEqual(Object.keys(initialBranding.data.branding).sort(),['logo_dark_url','logo_url','name','show_name']);
+  assert.equal((await request('/branding.php','PUT',{name:'No access'})).status,401);
+  assert.equal((await request('/branding.php','PUT',{name:''},token)).status,422);
+  assert.equal((await request('/branding.php','PUT',{logo_url:'javascript:alert(1)'},token)).status,422);
+  const customBranding={name:'Example Company',logo_url:'https://example.com/logo.png',logo_dark_url:'https://example.com/logo-dark.png',show_name:false};
+  const updatedBranding=await request('/branding.php','PUT',customBranding,token);assert.equal(updatedBranding.status,200,JSON.stringify(updatedBranding));assert.deepEqual(updatedBranding.data.branding,customBranding);
+  assert.deepEqual((await request('/branding.php')).data.branding,customBranding);
+
   const spaces=await ws('spaces','GET',undefined,token);assert.equal(spaces.status,200);assert.ok(spaces.data.spaces.some(s=>s.name==='Product'));
   assert.ok((await ws('tasks&all=1','GET',undefined,token)).data.tasks.length>=7);
   const created=await ws('spaces','POST',{name:`Test ${suffix}`},token);assert.equal(created.status,200,JSON.stringify(created));const spaceId=created.data.id;
@@ -30,6 +38,10 @@ test('fresh install, demo data, access controls and collaboration lifecycle', {s
   const email=`test-${suffix}@example.com`;const memberPass='integration-only-password-42';
   const member=await ws('users','POST',{email,password:memberPass,name:'Test Member',role:'member'},token);assert.equal(member.status,200,JSON.stringify(member));
   const memberLogin=await request('/auth.php','POST',{email,password:memberPass});assert.equal(memberLogin.status,200);const memberToken=memberLogin.data.token;
+  assert.equal((await request('/branding.php','PUT',{name:'Not allowed'},memberToken)).status,403);
+  await ws('settings&scope=branding','PUT',{settings:{name:'Bypass attempt'}},memberToken);
+  assert.deepEqual((await request('/branding.php')).data.branding,customBranding);
+  assert.equal((await request('/branding.php','PUT',initialBranding.data.branding,token)).status,200);
   const privateSpace=await ws('spaces','POST',{name:'Private fixture',is_private:true,member_ids:[]},token);assert.equal(privateSpace.status,200);
   const privateTask=await ws('tasks','POST',{space_id:privateSpace.data.id,title:'Private task'},token);assert.equal(privateTask.status,200);
   assert.equal((await ws('tasks&space_id='+privateSpace.data.id,'GET',undefined,memberToken)).status,403);

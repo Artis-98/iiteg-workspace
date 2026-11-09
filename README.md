@@ -5,7 +5,7 @@
 A self-hosted workspace for projects, people, and everyday collaboration.
 Glass-style light and dark themes, without a required hosted service.
 
-**Current release: 0.1.2.** This is a standalone distribution, with a fresh
+**Current release: 0.1.3.** This is a standalone distribution, with a fresh
 database and no company data, private integrations, or business-specific modules.
 
 ## Included
@@ -83,6 +83,19 @@ docker compose run --rm setup php bin/setup.php --demo
 This creates only fictional people and content. Sample member passwords are
 randomly generated and discarded; use your configured owner account to sign in.
 Demo seeding refuses a workspace that already has spaces.
+
+## Your company name and logo
+
+Use the **Workspace branding** settings button in the top bar to set your company
+name, upload a logo, and optionally provide a separate dark-mode logo. Uncheck
+"Show the name beside the logo" when your image already contains the company name.
+Changes are saved centrally and appear for everyone on sign-in and in the app.
+Only users with role-management permission can change these settings.
+
+The default remains IITEG Workspace with the product icon. No private company
+branding is bundled. Operators can optionally copy
+`backend/branding.defaults.example.json` to `backend/branding.defaults.json`
+to provide installation defaults before the first settings save.
 
 ## Custom subsidiaries
 

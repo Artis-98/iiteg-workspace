@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.1.3 — 2026-11-09
+
+- Added shared workspace name and logo settings, with optional dark-mode artwork.
+- Branding applies to sign-in, the app header, sidebar name, and browser title.
+- Role-management permission is required to save branding changes.
+- Company overrides stay separate from generic product defaults and settings.
+
 ## 0.1.2 — 2026-11-09
 
 - Replaced the placeholder W with an original shared-panes logo.

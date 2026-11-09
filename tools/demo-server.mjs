@@ -19,6 +19,7 @@ const server=createServer((req,res)=>{
  try{
  const url=new URL(req.url,'http://127.0.0.1:8180');
  if(url.pathname.startsWith('/api/')){
+  if(url.pathname==='/api/branding.php')return json(res,req.method==='GET'?200:405,req.method==='GET'?{branding:{name:'IITEG Workspace',logo_url:null,logo_dark_url:null,show_name:true}}:{error:'Read-only fictional demo'});
   if(url.pathname==='/api/auth.php')return json(res,200,{token:'fictional-demo-session',user:people[0]});
   const q=url.searchParams;const resource=q.get('resource');
   if(req.method!=='GET')return json(res,resource==='presence'||resource==='read_state'?200:405,resource==='presence'||resource==='read_state'?{success:true}:{error:'Read-only fictional demo'});

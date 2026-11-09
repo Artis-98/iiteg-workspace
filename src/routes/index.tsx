@@ -4,6 +4,7 @@ import { ArrowRight, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { login, getToken } from "@/lib/api";
 import { Wordmark } from "@/components/Wordmark";
+import { DEFAULT_BRANDING, useBranding } from "@/lib/branding";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -17,6 +18,8 @@ export const Route = createFileRoute("/")({
 
 function LoginPage() {
   const navigate = useNavigate();
+  const branding = useBranding().data || DEFAULT_BRANDING;
+  useEffect(() => { document.title = `Sign in — ${branding.name}`; }, [branding.name]);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -52,7 +55,7 @@ function LoginPage() {
       <section className="login-story" aria-label="IITEG workspace">
         <div className="login-brand"><Wordmark /></div>
         <div>
-          <div className="login-eyebrow">The IITEG workspace</div>
+          <div className="login-eyebrow">{branding.name}</div>
           <h1>A place for<br />what comes next.</h1>
           <p>Bring your projects, people, and everyday operations into focus.</p>
           <div className="login-index" aria-hidden="true">
@@ -77,7 +80,7 @@ function LoginPage() {
               {!loading && <ArrowRight className="h-4 w-4" />}
             </button>
           </form>
-          <p className="login-private">Private workspace · Access for IITEG members</p>
+          <p className="login-private">Private workspace · Team access</p>
         </div>
       </section>
     </main>

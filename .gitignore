@@ -9,3 +9,6 @@ release/
 backend/storage/
 playwright-report/
 test-results/
+
+# Operator-specific company branding (public display values, not product defaults)
+backend/branding.defaults.json

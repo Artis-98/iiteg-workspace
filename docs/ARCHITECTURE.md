@@ -21,3 +21,7 @@ local browser token. See SECURITY.md for attachment and extension boundaries.
 
 The core ships no company business modules. New bundled subsidiary panels use
 `src/extensions/manifest.json` and `src/extensions/index.ts`.
+
+`backend/branding.php` exposes only display branding before sign-in. Writes need
+role-management permission and use the dedicated `ws_branding` table, so generic
+workspace settings cannot override the company identity.

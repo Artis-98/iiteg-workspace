@@ -1,5 +1,5 @@
 import { Link, useRouterState } from "@tanstack/react-router";
-import { useState, type ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import {
   Home,
   Menu,
@@ -10,12 +10,15 @@ import {
   LogOut,
   Sun,
   Moon,
+  Settings2,
 } from "lucide-react";
 import { getUser, logout } from "@/lib/api";
 import { useCan } from "@/lib/permissions";
 import { Wordmark } from "@/components/Wordmark";
 import { Avatar } from "./Avatar";
 import { ProfileModal } from "./ProfileModal";
+import { BrandingModal } from "./BrandingModal";
+import { DEFAULT_BRANDING, useBranding } from "@/lib/branding";
 import { useTheme } from "@/lib/theme";
 import { clearPresence, usePresenceHeartbeat, usePresenceMap } from "@/lib/presence";
 import { useAppHeight } from "@/lib/viewport";
@@ -36,6 +39,9 @@ export function WorkspaceShell({ children, onMenu }: { children: ReactNode; onMe
   const user = getUser();
   const { can, me } = useCan();
   const [profileOpen, setProfileOpen] = useState(false);
+  const [brandingOpen, setBrandingOpen] = useState(false);
+  const branding = useBranding().data || DEFAULT_BRANDING;
+  useEffect(() => { document.title = `${NAV.find(item => pathname.startsWith(item.to))?.label || "Workspace"} — ${branding.name}`; }, [branding.name, pathname]);
   // `me` is the live record; the localStorage copy is the pre-load fallback.
   const displayName = me?.name || user?.name || user?.email || "";
   useAppHeight();
@@ -95,6 +101,7 @@ export function WorkspaceShell({ children, onMenu }: { children: ReactNode; onMe
             />
             <PresenceDot state={myState} size={9} ring className="absolute -bottom-px -right-px" />
           </button>
+          {can("roles.manage") && <button type="button" onClick={() => setBrandingOpen(true)} title="Workspace branding" aria-label="Workspace branding" className="flex h-8 w-8 items-center justify-center rounded-full text-[var(--txt-3)] transition hover:bg-[var(--tint)] hover:text-[var(--txt-1)]"><Settings2 className="h-4 w-4" strokeWidth={1.7} /></button>}
           <ThemeToggle />
           <button
             onClick={() => {
@@ -139,6 +146,7 @@ export function WorkspaceShell({ children, onMenu }: { children: ReactNode; onMe
       </div>
 
       {profileOpen && me && <ProfileModal me={me} onClose={() => setProfileOpen(false)} />}
+      {brandingOpen && <BrandingModal onClose={() => setBrandingOpen(false)} />}
     </div>
   );
 }

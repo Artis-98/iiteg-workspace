@@ -39,6 +39,7 @@ import {
 
 
 import { toast } from "sonner";
+import { DEFAULT_BRANDING, useBranding } from "@/lib/branding";
 import { extensions, extensionPanels } from "@/extensions";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { getUser } from "@/lib/api";
@@ -218,6 +219,7 @@ export function Workspace({ initialView }: { initialView: View }) {
 /* ================= Sidebar ================= */
 
 function WorkspaceNav({ view, onSelect, onClose }: { view: View; onSelect: (v: View) => void; onClose?: () => void }) {
+  const workspaceBranding = useBranding().data || DEFAULT_BRANDING;
   const qc = useQueryClient();
   const me = getUser();
   const { can } = useCan();
@@ -458,8 +460,8 @@ function WorkspaceNav({ view, onSelect, onClose }: { view: View; onSelect: (v: V
         </div>
       )}
       <div className="workspace-sidebar-heading">
-        <span className="workspace-emblem" aria-hidden="true">I</span>
-        <div><strong>IITEG workspace</strong><small>People, projects & operations</small></div>
+        <span className="workspace-emblem" aria-hidden="true">{workspaceBranding.name.charAt(0)}</span>
+        <div><strong>{workspaceBranding.name}</strong><small>People, projects & operations</small></div>
       </div>
       <div className="flex-1 overflow-y-auto pb-16 md:pb-0">
 
