@@ -1,0 +1,57 @@
+name: Verify release
+on: [push, pull_request, workflow_dispatch]
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    services:
+      database:
+        image: mariadb:11.4
+        env:
+          MARIADB_ROOT_PASSWORD: ci-only-database-password
+          MARIADB_DATABASE: workspace
+        ports: ["3306:3306"]
+        options: >-
+          --health-cmd="healthcheck.sh --connect --innodb_initialized"
+          --health-interval=5s --health-timeout=5s --health-retries=30
+    env:
+      DB_HOST: 127.0.0.1
+      DB_NAME: workspace
+      DB_USER: root
+      DB_PASSWORD: ci-only-database-password
+      APP_KEY: ci-only-application-key-not-for-deployment-0123456789
+      ADMIN_EMAIL: owner@example.com
+      ADMIN_PASSWORD: ci-only-admin-password-012345
+      PUBLIC_API_URL: http://127.0.0.1:8081
+      API_BASE: http://127.0.0.1:8081
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: {node-version: 22, cache: npm}
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          extensions: pdo_mysql, mbstring, fileinfo
+      - run: npm ci
+      - run: npm run build
+      - run: npm run typecheck
+      - name: Lint PHP
+        run: find backend -name '*.php' -print0 | xargs -0 -n1 php -l
+      - name: Initialize a blank database
+        run: php backend/bin/setup.php
+      - name: Check repeatable setup and load fictional demo
+        run: php backend/bin/setup.php --demo
+      - name: Start API
+        run: php -S 127.0.0.1:8081 -t backend > /tmp/workspace-api.log 2>&1 &
+      - name: API and release checks
+        run: npm test
+      - name: Build complete release archive
+        run: python3 tools/package.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: iiteg-workspace-0.1.0
+          path: release/*
+      - name: API logs on failure
+        if: failure()
+        run: cat /tmp/workspace-api.log || true

@@ -1,0 +1,49 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+const base=process.env.API_BASE;
+test('fresh install, demo data, access controls and collaboration lifecycle', {skip: !base}, async t => {
+  const suffix=Date.now();
+  async function request(path, method='GET', body, token) {
+    const res=await fetch(base+path,{method,headers:{'Content-Type':'application/json',...(token?{Authorization:`Bearer ${token}`}:{})},body:body===undefined?undefined:JSON.stringify(body)});
+    let data;try{data=await res.json()}catch{data={}};return {status:res.status,data};
+  }
+  const ws=(query,method='GET',body,token)=>request('/admin/workspace.php?resource='+query,method,body,token);
+  assert.equal((await ws('tasks&all=1')).status,401);
+  assert.equal((await request('/auth.php','POST',{email:process.env.ADMIN_EMAIL,password:'incorrect'})).status,401);
+  const login=await request('/auth.php','POST',{email:process.env.ADMIN_EMAIL,password:process.env.ADMIN_PASSWORD});
+  assert.equal(login.status,200,JSON.stringify(login));const token=login.data.token;
+  const me=await ws('me','GET',undefined,token);assert.equal(me.data.me.role,'op');
+  const spaces=await ws('spaces','GET',undefined,token);assert.equal(spaces.status,200);assert.ok(spaces.data.spaces.some(s=>s.name==='Product'));
+  assert.ok((await ws('tasks&all=1','GET',undefined,token)).data.tasks.length>=7);
+  const created=await ws('spaces','POST',{name:`Test ${suffix}`},token);assert.equal(created.status,200,JSON.stringify(created));const spaceId=created.data.id;
+  const custom=await ws('space_columns&space_id='+spaceId,'PUT',{columns:[{key:'planned',label:'Planned',tone:'sky'},{key:'shipped',label:'Shipped',tone:'green'}]},token);assert.equal(custom.status,200,JSON.stringify(custom));
+  const createdTask=await ws('tasks','POST',{space_id:spaceId,title:'Integration task',status:'planned'},token);assert.equal(createdTask.status,200,JSON.stringify(createdTask));const taskId=createdTask.data.id;
+  assert.equal((await ws('tasks&id='+taskId,'PUT',{status:'shipped'},token)).status,200);
+  const tasks=await ws('tasks&space_id='+spaceId,'GET',undefined,token);assert.equal(tasks.data.tasks[0].status,'shipped');
+  const sub=await ws('tasks','POST',{space_id:spaceId,title:'Subtask',parent_id:taskId},token);assert.equal(sub.status,200);
+  assert.equal((await ws('tasks&id='+taskId,'PUT',{parent_id:sub.data.id},token)).status,422);
+  const doc=await ws('docs','POST',{title:'Integration doc',body:'# Hello',space_id:spaceId},token);assert.equal(doc.status,200,JSON.stringify(doc));
+  assert.equal((await ws('docs&id='+doc.data.id,'GET',undefined,token)).data.doc.body,'# Hello');
+  const channel=await ws('channels','POST',{name:`test-${suffix}`,description:'Integration fixture'},token);assert.equal(channel.status,200);
+  const message=await ws('messages','POST',{channel_id:channel.data.id,body:'Hello'},token);assert.equal(message.status,200,JSON.stringify(message));
+  assert.equal((await ws('messages&id='+message.data.id,'PUT',{body:'Updated'},token)).status,200);
+  const email=`test-${suffix}@example.com`;const memberPass='integration-only-password-42';
+  const member=await ws('users','POST',{email,password:memberPass,name:'Test Member',role:'member'},token);assert.equal(member.status,200,JSON.stringify(member));
+  const memberLogin=await request('/auth.php','POST',{email,password:memberPass});assert.equal(memberLogin.status,200);const memberToken=memberLogin.data.token;
+  const privateSpace=await ws('spaces','POST',{name:'Private fixture',is_private:true,member_ids:[]},token);assert.equal(privateSpace.status,200);
+  const privateTask=await ws('tasks','POST',{space_id:privateSpace.data.id,title:'Private task'},token);assert.equal(privateTask.status,200);
+  assert.equal((await ws('tasks&space_id='+privateSpace.data.id,'GET',undefined,memberToken)).status,403);
+  assert.equal((await ws('tasks&id='+privateTask.data.id,'PUT',{title:'No access'},memberToken)).status,403);
+  assert.equal((await ws('roles','POST',{name:'Escalated',rank:0,permissions:['*']},memberToken)).status,403);
+  const timer=await ws('time_entries','POST',{action:'start',task_id:taskId},token);assert.equal(timer.status,200,JSON.stringify(timer));
+  const entries=await ws('time_entries','GET',undefined,token);assert.equal(entries.status,200);assert.ok(entries.data.running);
+  const headers=new Headers({Authorization:`Bearer ${token}`});const form=new FormData();form.append('file',new Blob(['hello'],{type:'text/plain'}),'note.txt');
+  const uploaded=await fetch(base+'/admin/upload.php',{method:'POST',headers,body:form});assert.equal(uploaded.status,200);const {url}=await uploaded.json();
+  const file=await fetch(url);assert.equal(await file.text(),'hello');
+  const broken=await fetch(url.replace(/sig=[a-f0-9]+/,'sig=bad'));assert.equal(broken.status,404);
+  assert.equal((await ws('tasks&id='+taskId,'DELETE',undefined,token)).status,200);
+  assert.equal((await ws('spaces&id='+spaceId,'DELETE',undefined,token)).status,200);
+  // Changing a password invalidates the old signed session immediately.
+  const changed=await ws('me','PUT',{current_password:memberPass,new_password:memberPass+'new'},memberToken);assert.equal(changed.status,200,JSON.stringify(changed));
+  assert.equal((await ws('me','GET',undefined,memberToken)).status,401);
+});

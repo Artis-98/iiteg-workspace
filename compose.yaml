@@ -1,0 +1,47 @@
+x-api-env: &api-env
+  DB_HOST: db
+  DB_PORT: 3306
+  DB_NAME: ${DB_NAME:-workspace}
+  DB_USER: ${DB_USER:-workspace}
+  DB_PASSWORD: ${DB_PASSWORD:?Run npm run setup first}
+  APP_KEY: ${APP_KEY:?Run npm run setup first}
+  ADMIN_EMAIL: ${ADMIN_EMAIL:?Set ADMIN_EMAIL}
+  ADMIN_NAME: ${ADMIN_NAME:-Workspace Owner}
+  ADMIN_PASSWORD: ${ADMIN_PASSWORD:?Set ADMIN_PASSWORD}
+  PUBLIC_API_URL: ${PUBLIC_API_URL:-http://localhost:8080/api}
+  FRONTEND_ORIGIN: ${FRONTEND_ORIGIN:-}
+  UPLOAD_DIR: /var/lib/workspace/uploads
+services:
+  db:
+    image: mariadb:11.4
+    environment:
+      MARIADB_DATABASE: ${DB_NAME:-workspace}
+      MARIADB_USER: ${DB_USER:-workspace}
+      MARIADB_PASSWORD: ${DB_PASSWORD:?Run npm run setup first}
+      MARIADB_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:?Run npm run setup first}
+    volumes: [database:/var/lib/mysql]
+    healthcheck:
+      test: [CMD, healthcheck.sh, --connect, --innodb_initialized]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+  setup:
+    build: ./backend
+    environment: *api-env
+    command: [php, bin/setup.php]
+    depends_on:
+      db: {condition: service_healthy}
+    volumes: [uploads:/var/lib/workspace/uploads]
+  api:
+    build: ./backend
+    environment: *api-env
+    depends_on:
+      setup: {condition: service_completed_successfully}
+    volumes: [uploads:/var/lib/workspace/uploads]
+  web:
+    build: .
+    ports: ["127.0.0.1:8080:80"]
+    depends_on: [api]
+volumes:
+  database:
+  uploads:

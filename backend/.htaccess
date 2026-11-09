@@ -1,0 +1,5 @@
+Options -Indexes
+<FilesMatch "^(config\.php|schema\.sql|Dockerfile|.*\.env)$">
+Require all denied
+</FilesMatch>
+SetEnvIf Authorization "(.+)" HTTP_AUTHORIZATION=$1

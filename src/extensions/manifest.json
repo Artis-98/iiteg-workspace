@@ -1,0 +1,10 @@
+[
+  {
+    "slug": "example-studio",
+    "name": "Example Studio",
+    "description": "A fictional subsidiary showing how extensions work.",
+    "detail": "Replace this example with your own subsidiary, internal tool, or custom React panel. See docs/EXTENSIONS.md.",
+    "url": "https://example.com",
+    "icon": "building"
+  }
+]
