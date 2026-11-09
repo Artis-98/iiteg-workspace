@@ -3,4 +3,5 @@ node_modules
 dist
 release
 .env
+.env.*
 backend/storage
