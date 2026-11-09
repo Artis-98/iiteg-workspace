@@ -3,7 +3,7 @@
 A self-hosted workspace for projects, people, and everyday collaboration.
 Glass-style light and dark themes, without a required hosted service.
 
-**First public release: 0.1.0.** This is a standalone distribution, with a fresh
+**Current release: 0.1.1.** This is a standalone distribution, with a fresh
 database and no company data, private integrations, or business-specific modules.
 
 ## Included
@@ -17,6 +17,34 @@ database and no company data, private integrations, or business-specific modules
 - A small, trusted extension registry for custom subsidiaries and React panels.
 - Optional fictional demo content: Product, Design and Operations spaces, tasks,
   documents, channels, and demo members. No demo passwords are shipped.
+
+## Screenshots
+
+Actual application screens using fictional, read-only demo content.
+
+| Sign in | Kanban |
+| --- | --- |
+| ![Glass-style sign-in](screenshots/login-demo.jpg) | ![Fictional product board](screenshots/kanban-demo.jpg) |
+| **Planner** | **Documents** |
+| ![Fictional team schedule](screenshots/planner-demo.jpg) | ![Sample handbook](screenshots/docs-demo.jpg) |
+
+[View the Kanban filter overlay](screenshots/kanban-filter-demo.jpg).
+
+## Try the dummy-data preview
+
+The release ZIP includes the prebuilt app. With Node.js 22.12+ installed, extract
+it and run this from the extracted project folder:
+
+```sh
+node tools/demo-server.mjs
+```
+
+Open **http://127.0.0.1:8180**. Use `demo@example.com` and `demo` in the sign-in
+form. These are fictional preview values, not real account credentials.
+The preview is read-only, binds to loopback, and never connects to a database,
+production API, or company installation. For a source checkout, run `npm ci`
+and `npm run build` first; `npm run demo` starts the same preview server.
+Use Docker below for an editable, persistent installation.
 
 ## Quick start with Docker
 

@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.1.1 — 2026-11-09
+
+- Added sign-in, Kanban, filter overlay, planner, and document screenshots.
+- Included a loopback-only, read-only dummy-data preview server in the release ZIP.
+- Added the screenshot gallery and preview instructions to the README.
+
 ## 0.1.0 — 2026-11-09
 
 - First standalone open-source release of IITEG Workspace under MIT.

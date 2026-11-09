@@ -10,7 +10,8 @@
     "typecheck": "tsc --noEmit",
     "test": "node --test tests/*.test.mjs",
     "setup": "node tools/configure.mjs",
-    "package": "python tools/package.py"
+    "package": "python tools/package.py",
+    "demo": "node tools/demo-server.mjs"
   },
   "dependencies": {
     "@radix-ui/react-popover": "^1.1.15",
@@ -40,7 +41,7 @@
   "resolutions": {
     "seroval": "^1.6.2"
   },
-  "version": "0.1.0",
+  "version": "0.1.1",
   "license": "MIT",
   "description": "Self-hosted project management and team collaboration.",
   "repository": {
