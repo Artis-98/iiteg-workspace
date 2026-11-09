@@ -1,9 +1,11 @@
+<p><img src="brand/workspace-icon.svg" alt="IITEG Workspace shared-panes logo" width="88" height="88"></p>
+
 # IITEG Workspace
 
 A self-hosted workspace for projects, people, and everyday collaboration.
 Glass-style light and dark themes, without a required hosted service.
 
-**Current release: 0.1.1.** This is a standalone distribution, with a fresh
+**Current release: 0.1.2.** This is a standalone distribution, with a fresh
 database and no company data, private integrations, or business-specific modules.
 
 ## Included

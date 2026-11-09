@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.1.2 — 2026-11-09
+
+- Replaced the placeholder W with an original shared-panes logo.
+- Added a reusable SVG/PNG brand kit and monochrome mark.
+- Updated app branding, favicon, touch icon, and README identity.
+
 ## 0.1.1 — 2026-11-09
 
 - Added sign-in, Kanban, filter overlay, planner, and document screenshots.
