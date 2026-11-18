@@ -9,8 +9,8 @@ import { DEFAULT_BRANDING, useBranding } from "@/lib/branding";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Sign in — IITEG Workspace" },
-      { name: "description", content: "Sign in to the IITEG Workspace." },
+      { title: "Sign in — Workspace" },
+      { name: "description", content: "Sign in to the Workspace." },
     ],
   }),
   component: LoginPage,
@@ -52,11 +52,10 @@ function LoginPage() {
 
   return (
     <main className="login-page">
-      <section className="login-story" aria-label="IITEG workspace">
+      <section className="login-story" aria-label="Workspace">
         <div className="login-brand"><Wordmark /></div>
         <div>
-          <div className="login-eyebrow">{branding.name}</div>
-          <h1>A place for<br />what comes next.</h1>
+          <h1>Your work,<br />in one place.</h1>
           <p>Bring your projects, people, and everyday operations into focus.</p>
           <div className="login-index" aria-hidden="true">
             <span><small>01</small>Projects & planning</span>
@@ -64,7 +63,7 @@ function LoginPage() {
             <span><small>03</small>Daily operations</span>
           </div>
         </div>
-        <div className="login-footnote">IITEG</div>
+        <div className="login-footnote">Self-hosted · Open source</div>
       </section>
       <section className="login-entry" aria-labelledby="sign-in-heading">
         <div key={shake} className={`login-form-wrap ${shake ? "animate-shake" : ""}`}>

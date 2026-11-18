@@ -36,10 +36,10 @@ import {
 export const Route = createFileRoute("/_authenticated/teams")({
   head: () => ({
     meta: [
-      { title: "Teams — IITEG Workspace" },
-      { name: "description", content: "Create teams and assign people across the IITEG Workspace." },
-      { property: "og:title", content: "Teams — IITEG Workspace" },
-      { property: "og:description", content: "Create teams and assign people across the IITEG Workspace." },
+      { title: "Teams — Workspace" },
+      { name: "description", content: "Create teams and assign people across the Workspace." },
+      { property: "og:title", content: "Teams — Workspace" },
+      { property: "og:description", content: "Create teams and assign people across the Workspace." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
     ],

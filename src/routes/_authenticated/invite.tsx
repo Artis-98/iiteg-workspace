@@ -10,10 +10,10 @@ import { canAssignRole, fetchRoles, useCan } from "@/lib/permissions";
 export const Route = createFileRoute("/_authenticated/invite")({
   head: () => ({
     meta: [
-      { title: "Invite — IITEG Workspace" },
-      { name: "description", content: "Create new IITEG Workspace users." },
-      { property: "og:title", content: "Invite — IITEG Workspace" },
-      { property: "og:description", content: "Create new IITEG Workspace users." },
+      { title: "Invite — Workspace" },
+      { name: "description", content: "Create new Workspace users." },
+      { property: "og:title", content: "Invite — Workspace" },
+      { property: "og:description", content: "Create new Workspace users." },
     ],
   }),
   component: InvitePage,

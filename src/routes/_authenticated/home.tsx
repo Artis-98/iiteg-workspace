@@ -148,9 +148,9 @@ import { useCan } from "@/lib/permissions";
 export const Route = createFileRoute("/_authenticated/home")({
   head: () => ({
     meta: [
-      { title: "Home — IITEG Workspace" },
+      { title: "Home — Workspace" },
       { name: "description", content: "Channels, direct messages and task boards for the iiteg team." },
-      { property: "og:title", content: "Home — IITEG Workspace" },
+      { property: "og:title", content: "Home — Workspace" },
       { property: "og:description", content: "Channels, direct messages and task boards for the iiteg team." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },

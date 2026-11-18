@@ -9,7 +9,7 @@ export function Wordmark({ className = "", short = false }: { className?: string
   const [failedLogo, setFailedLogo] = useState<string | null>(null);
   const customLogo = theme === "dark" ? branding.logo_dark_url || branding.logo_url : branding.logo_url || branding.logo_dark_url;
   const hasCustomLogo = !!customLogo && failedLogo !== customLogo;
-  const logo = hasCustomLogo ? customLogo! : "/workspace-icon-192-836cb6141c.png";
+  const logo = hasCustomLogo ? customLogo! : "/workspace-icon-192-199214ffb9.png";
   const showName = !hasCustomLogo || branding.show_name;
   return <span role="img" aria-label={branding.name} className={`inline-flex min-w-0 items-center gap-2 font-semibold tracking-tight ${className}`}>
     <img key={logo} src={logo} alt="" aria-hidden="true" className={`${hasCustomLogo && !showName ? "h-[1.65em] max-w-[9em]" : "h-[1.65em] max-w-[2.5em]"} w-auto shrink-0 object-contain`} onError={() => { if (hasCustomLogo) setFailedLogo(customLogo); }} />

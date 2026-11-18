@@ -1,6 +1,6 @@
 <p><img src="brand/workspace-icon-512.png" alt="Workspace glass W logo" width="88" height="88"></p>
 
-# IITEG Workspace
+# Workspace
 
 A self-hosted workspace for projects, people, and everyday collaboration.
 Glass-style light and dark themes, without a required hosted service.
@@ -92,7 +92,7 @@ name, upload a logo, and optionally provide a separate dark-mode logo. Uncheck
 Changes are saved centrally and appear for everyone on sign-in and in the app.
 Only users with role-management permission can change these settings.
 
-The default remains IITEG Workspace with the product icon. No private company
+The default remains Workspace with the product icon. No private company
 branding is bundled. Operators can optionally copy
 `backend/branding.defaults.example.json` to `backend/branding.defaults.json`
 to provide installation defaults before the first settings save.

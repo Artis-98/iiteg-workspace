@@ -32,9 +32,9 @@ import {
 export const Route = createFileRoute("/_authenticated/docs")({
   head: () => ({
     meta: [
-      { title: "Docs — IITEG Workspace" },
+      { title: "Docs — Workspace" },
       { name: "description", content: "Internal iiteg documents and notes." },
-      { property: "og:title", content: "Docs — IITEG Workspace" },
+      { property: "og:title", content: "Docs — Workspace" },
       { property: "og:description", content: "Internal iiteg documents and notes." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },

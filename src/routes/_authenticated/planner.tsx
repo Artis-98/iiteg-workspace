@@ -18,9 +18,9 @@ import {
 export const Route = createFileRoute("/_authenticated/planner")({
   head: () => ({
     meta: [
-      { title: "Planner — IITEG Workspace" },
+      { title: "Planner — Workspace" },
       { name: "description", content: "Plan iiteg work across subsidiaries and spaces." },
-      { property: "og:title", content: "Planner — IITEG Workspace" },
+      { property: "og:title", content: "Planner — Workspace" },
       { property: "og:description", content: "Plan iiteg work across subsidiaries and spaces." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },

@@ -9,7 +9,7 @@ test('dummy preview serves the real frontend and fictional data without allowing
    child.once('error',reject);child.once('exit',code=>reject(new Error(`Demo exited: ${code}`)));
    child.stdout.on('data',chunk=>{const match=String(chunk).match(/http:\/\/127\.0\.0\.1:\d+/);if(match){clearTimeout(timeout);resolve(match[0]);}});
   });
-  const page=await fetch(base);assert.equal(page.status,200);assert.match(await page.text(),/IITEG Workspace/);
+  const page=await fetch(base);assert.equal(page.status,200);assert.match(await page.text(),/Workspace/);
   const login=await fetch(base+'/api/auth.php',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:'demo@example.com',password:'demo'})});
   assert.equal((await login.json()).user.email,'demo@example.com');
   const spaces=await (await fetch(base+'/api/admin/workspace.php?resource=spaces')).json();assert.deepEqual(spaces.spaces.map(s=>s.name),['Product','Design','Operations']);

@@ -23,7 +23,7 @@ function wb_clean(array $input): array {
 $method=$_SERVER['REQUEST_METHOD']??'GET';
 if($method==='OPTIONS'){http_response_code(204);exit;}
 if(!in_array($method,['GET','PUT'],true)) wb_fail(405,'Method not allowed');
-$defaults=['name'=>'IITEG Workspace','logo_url'=>null,'logo_dark_url'=>null,'show_name'=>true];
+$defaults=['name'=>'Workspace','logo_url'=>null,'logo_dark_url'=>null,'show_name'=>true];
 // Optional operator defaults contain public name/logo values only. Never distribute a company override.
 $defaultsPath=__DIR__.'/branding.defaults.json';
 if(is_file($defaultsPath)){
