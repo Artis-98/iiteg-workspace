@@ -1,4 +1,4 @@
-<p><img src="brand/workspace-icon.svg" alt="IITEG Workspace shared-panes logo" width="88" height="88"></p>
+<p><img src="brand/workspace-icon-512.png" alt="Workspace glass W logo" width="88" height="88"></p>
 
 # IITEG Workspace
 

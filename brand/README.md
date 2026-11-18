@@ -1,12 +1,10 @@
-# IITEG Workspace identity
+# Workspace identity
 
-Three overlapping panes represent shared projects, documents, and conversations.
-The symbol is original vector artwork. It contains no font files or external images.
+The selected mark is a blue-edged glass W on a pearl-white app tile, with no text inside the logo.
 
-- `workspace-icon.svg`: primary blue app icon.
-- `workspace-mark-mono.svg`: single-color mark; set its CSS color for light/dark backgrounds.
-- `workspace-wordmark.svg`: horizontal product lockup (uses local font fallback).
-- `workspace-icon-{32,180,512,1024}.png`: raster exports.
-- `workspace-logo-preview.png`: light/dark and small-size preview.
+- `workspace-icon-master.png`: original approved artwork.
+- `workspace-icon-{16,32,48,180,192,512,1024}.png`: app, browser, and documentation exports.
+- `workspace-logo-preview.png`: full-size artwork preview.
+- `workspace-icon.svg`, `workspace-wordmark.svg`, `workspace-mark-mono.svg`, and `workspace-wordmark.png`: compatibility filenames using the same W-only artwork. The SVG files embed a raster image; they are not vector or monochrome masters.
 
 Artwork is distributed under the repository's MIT license.
